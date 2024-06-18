@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "N8Ters13!!",
+    "database": "TutorialDB",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "N8Ters13!!",
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "N8Ters13!!",
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

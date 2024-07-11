@@ -11,6 +11,8 @@ function Post() {
   const { authState } = useContext(AuthContext);
 
   useEffect(() => {
+    //seems like useEffect only gets called when page refreshes -> this might be causing issue
+    console.log("useEffect hook has been called");
     axios.get(`http://localhost:3001/posts/byId/${id}`).then((response) => {
       setPostObject(response.data);
     });
@@ -36,16 +38,47 @@ function Post() {
       )
       .then((response) => {
         if (response.data.error) {
-          alert(response.data.error);
+          console.log(response.data.error);
         } else {
           const commentToAdd = {
             commentBody: newComment,
             username: response.data.username,
+            //id: response.data.id,
+            //were not giving an id here, i think this is why id is undefined when we try to delete
           };
           setComments([...comments, commentToAdd]);
           setNewComment("");
+          console.log(
+            "comment array from response after adding comment: " + comments
+          );
         }
       });
+  };
+
+  const deleteComment = (id) => {
+    //issue -> when we dont refresh after adding comment, trying to delete gives undefined id
+    //if we don't refresh, comment is undefined on client side
+    //problem isnt necessarily comment doesnt exist on backend, but we cant retreive id in client before refreshing
+    //this problem starting happening during video 11 -> adding delete method
+    try {
+      console.log("executing delete on comment " + id + " on client side");
+      axios
+        .delete(`http://localhost:3001/comments/${id}`, {
+          headers: {
+            accessToken: localStorage.getItem("accessToken"),
+          },
+        })
+        .then(() => {
+          setComments(
+            comments.filter((val) => {
+              return val.id !== id;
+            })
+          );
+          //console.log("after setting comments after deleting " + comments); //is this getting reached?
+        });
+    } catch (error) {
+      throw new error(error);
+    }
   };
 
   return (
@@ -74,7 +107,16 @@ function Post() {
               <div key={key} className="comment">
                 {comment.commentBody}
                 <label> Username: {comment.username}</label>
-                {authState.username === comment.username && <button>X</button>}
+                {authState.username === comment.username && (
+                  <button
+                    onClick={() => {
+                      //console.log("deleting comment " + comment.id);
+                      deleteComment(comment.id);
+                    }}
+                  >
+                    X
+                  </button>
+                )}
               </div>
             );
           })}

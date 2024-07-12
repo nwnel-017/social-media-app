@@ -1,17 +1,32 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import { AuthContext } from "../helpers/AuthContext";
 
 function Home() {
   const [listOfPosts, setListOfPosts] = useState([]);
+  const [likedPosts, setLikedPosts] = useState([]);
+  const { authState } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("http://localhost:3001/Posts").then((response) => {
-      setListOfPosts(response.data);
-    });
+    if (!authState.status) {
+      navigate("/login");
+    }
+    axios
+      .get("http://localhost:3001/posts", {
+        headers: { accessToken: localStorage.getItem("accessToken") },
+      })
+      .then((response) => {
+        setListOfPosts(response.data.listOfPosts);
+        setLikedPosts(
+          response.data.likedPosts.map((like) => {
+            return like.PostId;
+          })
+        );
+      });
   }, []);
 
   const likePost = (postId) => {
@@ -42,6 +57,16 @@ function Home() {
             }
           })
         );
+
+        if (likedPosts.includes(postId)) {
+          setLikedPosts(
+            likedPosts.filter((id) => {
+              return id !== postId;
+            })
+          );
+        } else {
+          setLikedPosts([...likedPosts, postId]);
+        }
       });
   };
 
@@ -60,8 +85,14 @@ function Home() {
               {value.postText}
             </div>
             <div className="footer">
-              {value.userName}{" "}
-              <ThumbUpAltIcon onClick={() => likePost(value.id)} />
+              {value.userName}
+              {""}
+              <ThumbUpAltIcon
+                onClick={() => likePost(value.id)}
+                className={
+                  likedPosts.includes(value.id) ? "unlikeBttn" : "likeBttn" //TO DO: create unlikeBttn and likeBttn class
+                }
+              />
               <label> {value.Likes.length} </label>
             </div>
           </div>

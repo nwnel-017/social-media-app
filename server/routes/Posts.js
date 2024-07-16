@@ -15,10 +15,30 @@ router.get("/byId/:id", async (req, res) => {
   res.json(post);
 });
 
-router.post("/", async (req, res) => {
+//query post based on user's id
+router.get("/byUserId/:uid", async (req, res) => {
+  const uid = req.params.uid;
+  const listOfPosts = await Posts.findAll({ where: {} });
+  res.json(post);
+});
+
+router.post("/", validateToken, async (req, res) => {
   const post = req.body;
+  post.username = req.user.username;
+  post.UserId = req.user.id;
   await Posts.create(post);
   res.json(post);
+});
+
+router.delete("/:postId", validateToken, async (req, res) => {
+  const postId = req.params.postId;
+  await Posts.destroy({
+    where: {
+      id: postId,
+    },
+  });
+
+  res.json("DELETED SUCCESSFULLY");
 });
 
 module.exports = router;

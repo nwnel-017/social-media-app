@@ -5,6 +5,7 @@ import CreatePost from "./pages/CreatePost";
 import Post from "./pages/Post";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
+import Profile from "./pages/Profile";
 import PageNotFound from "./pages/PageNotFound";
 import { AuthContext } from "./helpers/AuthContext";
 import { useState, useEffect } from "react";
@@ -53,16 +54,17 @@ function App() {
       <AuthContext.Provider value={{ authState, setAuthState }}>
         <Router>
           <div>
-            <Link to="/createpost">Create a Post</Link>
-            <br />
-            <Link to="/">Home Page</Link>
             {!authState ? (
               <>
                 <Link to="/login">Login</Link>
                 <Link to="/registration">Create Account</Link>
               </>
             ) : (
-              <button onClick={logout}>Logout</button>
+              <>
+                <Link to="/">Home Page</Link>
+                <Link to="/createpost">Create a Post</Link>
+                <button onClick={logout}>Logout</button>
+              </>
             )}
           </div>
           <Routes>
@@ -71,6 +73,7 @@ function App() {
             <Route path="/post/:id" exact Component={Post} />
             <Route path="/login" exact Component={Login} />
             <Route path="/registration" exact Component={Registration} />
+            <Route path="/profile/:id" exact Component={Profile}></Route>
             <Route path="*" exact Component={PageNotFound} />
           </Routes>
         </Router>

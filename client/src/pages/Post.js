@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../helpers/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Post() {
   let { id } = useParams();
@@ -9,6 +10,7 @@ function Post() {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const { authState } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     //seems like useEffect only gets called when page refreshes -> this might be causing issue
@@ -48,11 +50,26 @@ function Post() {
           };
           setComments([...comments, commentToAdd]);
           setNewComment("");
-          console.log(
-            "comment array from response after adding comment: " + comments
-          );
         }
       });
+  };
+
+  const deletePost = (id) => {
+    try {
+      console.log("post deleting");
+      axios
+        .delete(`http://localhost:3001/posts/${id}`, {
+          headers: {
+            accessToken: localStorage.getItem("accessToken"),
+          },
+        })
+        .then(() => {
+          navigate("/");
+          alert("delete success");
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const deleteComment = (id) => {
@@ -74,7 +91,6 @@ function Post() {
               return val.id !== id;
             })
           );
-          //console.log("after setting comments after deleting " + comments); //is this getting reached?
         });
     } catch (error) {
       throw new error(error);
@@ -100,6 +116,15 @@ function Post() {
             }}
           ></input>
           <button onClick={addComment}>Add Comment</button>
+          {authState.username === postObject.username && (
+            <button
+              onClick={() => {
+                deletePost(postObject.id);
+              }}
+            >
+              Delete Post
+            </button>
+          )}
         </div>
         <div className="listOfComments">
           {comments.map((comment, key) => {

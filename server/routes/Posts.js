@@ -5,7 +5,7 @@ const { validateToken } = require("../middlewares/AuthMiddleware");
 
 router.get("/", validateToken, async (req, res) => {
   const listOfPosts = await Posts.findAll({ include: [Likes] }); //sequelize eager loading -> uses this to join tables
-  const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } }); //undefined id
+  const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
   res.json({ listOfPosts: listOfPosts, likedPosts: likedPosts });
 });
 
@@ -18,8 +18,11 @@ router.get("/byId/:id", async (req, res) => {
 //query post based on user's id
 router.get("/byUserId/:uid", async (req, res) => {
   const uid = req.params.uid;
-  const listOfPosts = await Posts.findAll({ where: {} });
-  res.json(post);
+  const listOfPosts = await Posts.findAll({
+    where: { UserId: uid },
+    include: [Likes],
+  });
+  res.json(listOfPosts);
 });
 
 router.post("/", validateToken, async (req, res) => {
@@ -28,6 +31,18 @@ router.post("/", validateToken, async (req, res) => {
   post.UserId = req.user.id;
   await Posts.create(post);
   res.json(post);
+});
+
+router.put("/title", validateToken, async (req, res) => {
+  const { newTitle, id } = req.body;
+  await Posts.update({ title: newTitle }, { where: { id: id } });
+  res.json(newTitle);
+});
+
+router.put("/postText", validateToken, async (req, res) => {
+  const { newText, id } = req.body;
+  await Posts.update({ postText: newText }, { where: { id: id } });
+  res.json(newText);
 });
 
 router.delete("/:postId", validateToken, async (req, res) => {

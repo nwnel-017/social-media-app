@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../helpers/AuthContext";
 import { useNavigate } from "react-router-dom";
+// import { post } from "../../../server/routes/Posts";
 
 function Post() {
   let { id } = useParams();
@@ -72,6 +73,30 @@ function Post() {
     }
   };
 
+  const editPost = (option) => {
+    if (option === "title") {
+      let newTitle = prompt("Enter New Title: ");
+      axios.put(
+        "http://localhost:3001/posts/title",
+        { newTitle: newTitle, id: id },
+        { headers: { accessToken: localStorage.getItem("accessToken") } }
+      );
+
+      setPostObject({ ...postObject, title: newTitle });
+    } else if (option === "body") {
+      let newBody = prompt("Enter New Post Text: ");
+      axios.put(
+        "http://localhost:3001/posts/postText",
+        { newText: newBody, id: id },
+        { headers: { accessToken: localStorage.getItem("accessToken") } }
+      );
+
+      setPostObject({ ...postObject, postText: newBody });
+    } else {
+      navigate("/*"); //go to page not found
+    }
+  };
+
   const deleteComment = (id) => {
     //issue -> when we dont refresh after adding comment, trying to delete gives undefined id
     //if we don't refresh, comment is undefined on client side
@@ -100,8 +125,22 @@ function Post() {
   return (
     <div className="postPage">
       <div className="leftSide">
-        <div className="title">{postObject.title}</div>
-        <div className="body">{postObject.postText}</div>
+        <div
+          className="title"
+          onClick={() => {
+            editPost("title");
+          }}
+        >
+          {postObject.title}
+        </div>
+        <div
+          className="body"
+          onClick={() => {
+            editPost("body");
+          }}
+        >
+          {postObject.postText}
+        </div>
         <div className="footer">{postObject.username}</div>
       </div>
       <div className="rightSide">

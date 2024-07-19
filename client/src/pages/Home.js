@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, Link } from "react-router-dom";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import { AuthContext } from "../helpers/AuthContext";
 
@@ -85,8 +85,9 @@ function Home() {
               {value.postText}
             </div>
             <div className="footer">
-              {value.userName}
-              {""}
+              <div className="username">
+                <Link to={`/profile/${value.UserId}`}>{value.username}</Link>
+              </div>
               <ThumbUpAltIcon
                 onClick={() => likePost(value.id)}
                 className={

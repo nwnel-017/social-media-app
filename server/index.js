@@ -3,6 +3,7 @@ const app = express();
 const db = require("./models");
 const cors = require("cors");
 
+//get rid of errors
 app.use(
   cors({
     origin: "http://localhost:3000",

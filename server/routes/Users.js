@@ -26,16 +26,19 @@ router.post("/login", async (req, res) => {
   else {
     bcrypt.compare(password, user.password).then((match) => {
       if (!match)
-        res.json({ error: "Wrong username and password combination!" });
-
-      const accessToken = sign(
-        {
-          username: user.username,
-          id: user.id,
-        },
-        "importantsecret"
-      );
-      res.json({ token: accessToken, username: username, id: user.id });
+        res.json({
+          error: "Wrong username and password combination!",
+        });
+      else {
+        const accessToken = sign(
+          {
+            username: user.username,
+            id: user.id,
+          },
+          "importantsecret"
+        );
+        res.json({ token: accessToken, username: username, id: user.id });
+      }
     });
   }
 });
@@ -54,6 +57,22 @@ router.get("/basicInfo/:id", async (req, res) => {
   });
 
   res.json(basicInfo);
+});
+
+router.put("/changepassword", validateToken, async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const user = await Users.findOne({ where: { username: req.user.username } }); //we get username from validateToken
+
+  bcrypt.compare(oldPassword, user.password).then(async (match) => {
+    if (!match) res.json({ error: "Wrong Password Entered!" });
+    bcrypt.hash(newPassword, 10).then((hash) => {
+      Users.update(
+        { password: hash },
+        { where: { username: req.user.username } }
+      );
+      res.json("SUCCESS!");
+    });
+  });
 });
 
 module.exports = router;

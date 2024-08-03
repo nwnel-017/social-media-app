@@ -1,6 +1,13 @@
 import "./App.css";
 import Home from "./pages/Home";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  // Navigate,
+  // useNavigate,
+} from "react-router-dom";
 import CreatePost from "./pages/CreatePost";
 import Post from "./pages/Post";
 import Login from "./pages/Login";
@@ -13,6 +20,7 @@ import axios from "axios";
 import ChangePassword from "./pages/ChangePassword";
 
 function App() {
+  // const navigate = useNavigate(); //error with this -> we need to move Router higher up in react tree
   const [authState, setAuthState] = useState({
     username: "",
     id: 0,
@@ -45,9 +53,9 @@ function App() {
   }, []);
 
   const logout = () => {
-    console.log("logout");
     localStorage.removeItem("accessToken");
     setAuthState(false);
+    // navigate("/login");
   };
 
   return (
@@ -62,9 +70,17 @@ function App() {
               </>
             ) : (
               <>
-                <Link to="/">Home Page</Link>
-                <Link to="/createpost">Create a Post</Link>
-                <button onClick={logout}>Logout</button>
+                <div className="banner">
+                  <Link to="/">Home Page</Link>
+                  {/* <Link to="/createpost">Create a Post</Link> */}
+                  <button onClick={logout}>Logout</button>
+                </div>
+                {/* <div className="feed"> */}
+                <div className="createPost">
+                  {/* <div className="profilepic"></div> */}
+                  <Link to="/createpost">Create a Post</Link>
+                </div>
+                {/* </div> */}
               </>
             )}
           </div>

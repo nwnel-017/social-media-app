@@ -71,10 +71,11 @@ function Home() {
   };
 
   return (
-    <div>
+    <div className="feed">
       {listOfPosts.map((value, key) => {
         return (
           <div className="post">
+            <div className="profile-pic"></div>
             <div className="title">{value.title}</div>
             <div
               className="body"
@@ -94,6 +95,7 @@ function Home() {
                   likedPosts.includes(value.id) ? "unlikeBttn" : "likeBttn" //TO DO: create unlikeBttn and likeBttn class
                 }
               />
+              <div className="comment-button">Comments</div>
               <label> {value.Likes.length} </label>
             </div>
           </div>

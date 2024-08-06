@@ -3,6 +3,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import CommentIcon from "@mui/icons-material/Comment";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { AuthContext } from "../helpers/AuthContext";
 
 function Home() {
@@ -75,28 +77,45 @@ function Home() {
       {listOfPosts.map((value, key) => {
         return (
           <div className="post">
-            <div className="profile-pic"></div>
-            <div className="title">{value.title}</div>
-            <div
-              className="body"
-              onClick={() => {
-                navigate(`/post/${value.id}`);
-              }}
-            >
-              {value.postText}
+            <div className="post-body">
+              <div className="user">
+                <AccountCircleIcon />
+                <div className="username">
+                  <Link to={`/profile/${value.UserId}`}>{value.username}</Link>
+                </div>
+              </div>
+              <div className="post-text-container">
+                <div className="post-text">
+                  <div className="title">{value.title}: </div>
+                  <div
+                    className="body"
+                    onClick={() => {
+                      navigate(`/post/${value.id}`);
+                    }}
+                  ></div>
+                  {value.postText}
+                </div>
+              </div>
             </div>
             <div className="footer">
-              <div className="username">
-                <Link to={`/profile/${value.UserId}`}>{value.username}</Link>
-              </div>
+              <CommentIcon
+                onClick={() => {
+                  navigate(`/post/${value.id}`);
+                }}
+              />
+
               <ThumbUpAltIcon
                 onClick={() => likePost(value.id)}
                 className={
                   likedPosts.includes(value.id) ? "unlikeBttn" : "likeBttn" //TO DO: create unlikeBttn and likeBttn class
                 }
               />
-              <div className="comment-button">Comments</div>
               <label> {value.Likes.length} </label>
+              {/* <div className="username">
+                <Link to={`/profile/${value.UserId}`}>{value.username}</Link>
+              </div> */}
+              {/* <div className="comment-button">Comments</div> */}
+              {/* <label> {value.Likes.length} </label> */}
             </div>
           </div>
         );

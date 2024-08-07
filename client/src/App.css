@@ -46,13 +46,15 @@
 .post-body {
   display: flex;
   width: 100%;
+  height: 100%;
   /* justify-content: space-around; */
 }
 
 .post-text-container {
-  width: 100%;
+  /* width: 100%; */
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
+  margin-left: 5%;
   /* justify-content: space-around; */
   /* align-items: center; */
 }
@@ -89,14 +91,21 @@
   border-radius: 10px;
 }
 
+.user {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
 .profile-pic {
   /* Ellipse 471 */
 
-  position: absolute;
+  /* position: absolute;
   width: 100px;
   height: 100px;
   left: 10px;
-  top: 70px;
+  top: 70px; */
+  /* sx: {{color: blue[500]}}; */
 
   /* background: url(.jpg), #d9d9d9; */
 }

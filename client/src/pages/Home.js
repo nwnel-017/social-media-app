@@ -3,9 +3,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import CommentIcon from "@mui/icons-material/Comment";
+import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { AuthContext } from "../helpers/AuthContext";
+import { blue, blueGrey, grey } from "@mui/material/colors";
 
 function Home() {
   const [listOfPosts, setListOfPosts] = useState([]);
@@ -78,12 +81,19 @@ function Home() {
         return (
           <div className="post">
             <div className="post-body">
-              <div className="user">
-                <AccountCircleIcon />
+              <div
+                className="user"
+                onClick={() => {
+                  navigate(`profile/${value.UserId}`);
+                }}
+              >
+                <AccountCircleIcon sx={{ color: grey[600], fontSize: 40 }} />
                 <div className="username">
-                  <Link to={`/profile/${value.UserId}`}>{value.username}</Link>
+                  {/* <Link to={`/profile/${value.UserId}`}>{value.username}</Link> */}
+                  {value.username}
                 </div>
               </div>
+              {/* <div className="post-body"> */}
               <div className="post-text-container">
                 <div className="post-text">
                   <div className="title">{value.title}: </div>
@@ -98,13 +108,15 @@ function Home() {
               </div>
             </div>
             <div className="footer">
-              <CommentIcon
+              <CommentOutlinedIcon
+                sx={{ color: grey[600] }}
                 onClick={() => {
                   navigate(`/post/${value.id}`);
                 }}
               />
 
-              <ThumbUpAltIcon
+              <ThumbUpOutlinedIcon
+                sx={{ color: grey[600] }}
                 onClick={() => likePost(value.id)}
                 className={
                   likedPosts.includes(value.id) ? "unlikeBttn" : "likeBttn" //TO DO: create unlikeBttn and likeBttn class
@@ -117,6 +129,7 @@ function Home() {
               {/* <div className="comment-button">Comments</div> */}
               {/* <label> {value.Likes.length} </label> */}
             </div>
+            {/* </div> */}
           </div>
         );
       })}

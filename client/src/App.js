@@ -78,7 +78,7 @@ function App() {
                 {/* <div className="feed"> */}
                 <div className="createPost">
                   {/* <div className="profilepic"></div> */}
-                  <Link to="/createpost">Create a Post</Link>
+                  {/* <Link to="/createpost">Create a Post</Link> */}
                 </div>
                 {/* </div> */}
               </>
@@ -86,7 +86,7 @@ function App() {
           </div>
           <Routes>
             <Route path="/" exact Component={Home} />
-            <Route path="/createpost" exact Component={CreatePost} />
+            {/* <Route path="/createpost" exact Component={CreatePost} /> */}
             <Route path="/post/:id" exact Component={Post} />
             <Route path="/login" exact Component={Login} />
             <Route path="/registration" exact Component={Registration} />

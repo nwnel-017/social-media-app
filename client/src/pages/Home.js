@@ -2,11 +2,15 @@ import React, { useContext } from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, Link } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import CommentIcon from "@mui/icons-material/Comment";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import RepeatOutlinedIcon from "@mui/icons-material/RepeatOutlined";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { AuthContext } from "../helpers/AuthContext";
 import { blue, blueGrey, grey } from "@mui/material/colors";
 
@@ -33,6 +37,28 @@ function Home() {
         );
       });
   }, []);
+
+  const initialValues = {
+    title: "",
+    postText: "",
+    username: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    title: Yup.string().required(),
+    postText: Yup.string().required(),
+    // username: Yup.string().min(3).max(15).required(),
+  });
+
+  const createPost = (data) => {
+    axios
+      .post("http://localhost:3001/posts", data, {
+        headers: { accessToken: localStorage.getItem("accessToken") },
+      })
+      .then((response) => {
+        navigate("/");
+      });
+  };
 
   const likePost = (postId) => {
     axios
@@ -77,6 +103,41 @@ function Home() {
 
   return (
     <div className="feed">
+      <div className="createPost">
+        <div className="user">
+          <AccountCircleIcon sx={{ color: grey[600], fontSize: 40 }} />
+        </div>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={createPost}
+          validationSchema={validationSchema}
+        >
+          <Form>
+            <label>Title: </label>
+            <ErrorMessage name="title" component="span" />
+            <Field
+              id="inputCreatePost"
+              name="title"
+              placeHolder="(Ex. Title...)"
+            ></Field>
+            <label>Post Text: </label>
+            <ErrorMessage name="postText" component="span" />
+            <Field
+              id="inputCreatePost"
+              name="postText"
+              placeHolder="(Ex. Post...)"
+            ></Field>
+            <label>Username: </label>
+            <ErrorMessage name="username" component="span" />
+            <Field
+              id="inputCreatePost"
+              name="username"
+              placeHolder="(Ex. john123...)"
+            ></Field>
+            <button type="submit">Create Post</button>
+          </Form>
+        </Formik>
+      </div>
       {listOfPosts.map((value, key) => {
         return (
           <div className="post">
@@ -114,15 +175,18 @@ function Home() {
                   navigate(`/post/${value.id}`);
                 }}
               />
-
-              <ThumbUpOutlinedIcon
-                sx={{ color: grey[600] }}
-                onClick={() => likePost(value.id)}
-                className={
-                  likedPosts.includes(value.id) ? "unlikeBttn" : "likeBttn" //TO DO: create unlikeBttn and likeBttn class
-                }
-              />
-              <label> {value.Likes.length} </label>
+              <div className="likes">
+                <ThumbUpOutlinedIcon
+                  sx={{ color: grey[600] }}
+                  onClick={() => likePost(value.id)}
+                  className={
+                    likedPosts.includes(value.id) ? "unlikeBttn" : "likeBttn" //TO DO: create unlikeBttn and likeBttn class
+                  }
+                />
+                <label> {value.Likes.length} </label>
+              </div>
+              <RepeatOutlinedIcon sx={{ color: grey[600] }} />
+              <FileUploadOutlinedIcon sx={{ color: grey[600] }} />
               {/* <div className="username">
                 <Link to={`/profile/${value.UserId}`}>{value.username}</Link>
               </div> */}

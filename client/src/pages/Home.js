@@ -45,18 +45,21 @@ function Home() {
   };
 
   const validationSchema = Yup.object().shape({
-    title: Yup.string().required(),
+    // title: Yup.string().required(),
     postText: Yup.string().required(),
     // username: Yup.string().min(3).max(15).required(),
   });
 
   const createPost = (data) => {
+    console.log("creating post " + data);
     axios
       .post("http://localhost:3001/posts", data, {
         headers: { accessToken: localStorage.getItem("accessToken") },
       })
       .then((response) => {
-        navigate("/");
+        // navigate("/");
+        setListOfPosts(response.data.listOfPosts);
+        console.log(response.data);
       });
   };
 
@@ -105,36 +108,25 @@ function Home() {
     <div className="feed">
       <div className="createPost">
         <div className="user">
-          <AccountCircleIcon sx={{ color: grey[600], fontSize: 40 }} />
+          <AccountCircleIcon sx={{ color: grey[600], fontSize: 80 }} />
         </div>
         <Formik
           initialValues={initialValues}
           onSubmit={createPost}
           validationSchema={validationSchema}
         >
-          <Form>
-            <label>Title: </label>
-            <ErrorMessage name="title" component="span" />
-            <Field
-              id="inputCreatePost"
-              name="title"
-              placeHolder="(Ex. Title...)"
-            ></Field>
-            <label>Post Text: </label>
-            <ErrorMessage name="postText" component="span" />
-            <Field
-              id="inputCreatePost"
-              name="postText"
-              placeHolder="(Ex. Post...)"
-            ></Field>
-            <label>Username: </label>
-            <ErrorMessage name="username" component="span" />
-            <Field
-              id="inputCreatePost"
-              name="username"
-              placeHolder="(Ex. john123...)"
-            ></Field>
-            <button type="submit">Create Post</button>
+          <Form className="center-vertical">
+            <div className="center-horizontal">
+              <div>
+                <ErrorMessage name="postText" component="span" />
+                <Field
+                  id="inputCreatePost"
+                  name="postText"
+                  placeHolder="(Ex. Post...)"
+                ></Field>
+                <button type="submit">Create Post</button>
+              </div>
+            </div>
           </Form>
         </Formik>
       </div>
@@ -155,18 +147,18 @@ function Home() {
                 </div>
               </div>
               {/* <div className="post-body"> */}
-              <div className="post-text-container">
-                <div className="post-text">
-                  <div className="title">{value.title}: </div>
-                  <div
-                    className="body"
-                    onClick={() => {
-                      navigate(`/post/${value.id}`);
-                    }}
-                  ></div>
-                  {value.postText}
-                </div>
+              <div className="post-text-container center-vertical">
+                {/* <div className="post-text"> */}
+                {/* <div className="title">{value.title}: </div> */}
+                <div
+                  className="body"
+                  onClick={() => {
+                    navigate(`/post/${value.id}`);
+                  }}
+                ></div>
+                {value.postText}
               </div>
+              {/* </div> */}
             </div>
             <div className="footer">
               <CommentOutlinedIcon

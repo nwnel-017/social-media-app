@@ -11,6 +11,10 @@ import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import RepeatOutlinedIcon from "@mui/icons-material/RepeatOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
+import GifBoxOutlinedIcon from "@mui/icons-material/GifBoxOutlined";
+import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { AuthContext } from "../helpers/AuthContext";
 import { blue, blueGrey, grey } from "@mui/material/colors";
 
@@ -116,17 +120,27 @@ function Home() {
           validationSchema={validationSchema}
         >
           <Form className="center-vertical">
-            <div className="center-horizontal">
+            {/* <div className="center-horizontal"> */}
+            <div>
+              <ErrorMessage name="postText" component="span" />
+              <Field
+                id="inputCreatePost"
+                name="postText"
+                placeHolder="What's going on"
+              ></Field>
               <div>
-                <ErrorMessage name="postText" component="span" />
-                <Field
-                  id="inputCreatePost"
-                  name="postText"
-                  placeHolder="(Ex. Post...)"
-                ></Field>
-                <button type="submit">Create Post</button>
+                <div className="space-between margin-top">
+                  <ImageOutlinedIcon />
+                  <GifBoxOutlinedIcon />
+                  <EmojiEmotionsOutlinedIcon />
+                  <LocationOnOutlinedIcon />
+                  <button type="submit" id="submit-new-post">
+                    Create Post
+                  </button>
+                </div>
               </div>
             </div>
+            {/* </div> */}
           </Form>
         </Formik>
       </div>

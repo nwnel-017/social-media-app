@@ -109,100 +109,121 @@ function Home() {
   };
 
   return (
-    <div className="feed">
-      <div className="createPost">
-        <div className="user">
-          <AccountCircleIcon sx={{ color: grey[600], fontSize: 80 }} />
+    <div className="homepage">
+      <div className="side-panel flex-box flex-center light-background">
+        <div className="flex-top-half flex-center">
+          <div
+            className="user"
+            onClick={() => {
+              navigate(`profile/${authState.username}`);
+            }}
+          >
+            <AccountCircleIcon sx={{ color: grey[600], fontSize: 80 }} />
+            <div className="username">{authState.username}</div>
+          </div>
         </div>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={createPost}
-          validationSchema={validationSchema}
-        >
-          <Form className="center-vertical">
-            {/* <div className="center-horizontal"> */}
-            <div>
-              <ErrorMessage name="postText" component="span" />
-              <Field
-                id="inputCreatePost"
-                name="postText"
-                placeHolder="What's going on"
-              ></Field>
-              <div>
-                <div className="space-between margin-top">
-                  <ImageOutlinedIcon />
-                  <GifBoxOutlinedIcon />
-                  <EmojiEmotionsOutlinedIcon />
-                  <LocationOnOutlinedIcon />
-                  <button type="submit" id="submit-new-post">
-                    Create Post
-                  </button>
-                </div>
-              </div>
-            </div>
-            {/* </div> */}
-          </Form>
-        </Formik>
       </div>
-      {listOfPosts.map((value, key) => {
-        return (
-          <div className="post">
-            <div className="post-body">
-              <div
-                className="user"
-                onClick={() => {
-                  navigate(`profile/${value.UserId}`);
-                }}
-              >
-                <AccountCircleIcon sx={{ color: grey[600], fontSize: 40 }} />
-                <div className="username">
-                  {/* <Link to={`/profile/${value.UserId}`}>{value.username}</Link> */}
-                  {value.username}
+      <div className="feed light-background">
+        <div className="createPost">
+          <div className="user">
+            <AccountCircleIcon sx={{ color: grey[600], fontSize: 80 }} />
+            {/* <AccountCircleIcon sx={{ color: "white", fontSize: 80 }} /> */}
+          </div>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={createPost}
+            validationSchema={validationSchema}
+          >
+            <Form className="center-vertical">
+              <div className="form-container">
+                <ErrorMessage name="postText" component="span" />
+                <Field
+                  id="inputCreatePost"
+                  name="postText"
+                  placeHolder="What's going on"
+                ></Field>
+                <div>
+                  <div className="space-between margin-top">
+                    <ImageOutlinedIcon />
+                    <GifBoxOutlinedIcon />
+                    <EmojiEmotionsOutlinedIcon />
+                    <LocationOnOutlinedIcon />
+                    <button type="submit" id="submit-new-post">
+                      Create Post
+                    </button>
+                  </div>
                 </div>
               </div>
-              {/* <div className="post-body"> */}
-              <div className="post-text-container center-vertical">
-                {/* <div className="post-text"> */}
-                {/* <div className="title">{value.title}: </div> */}
+            </Form>
+          </Formik>
+        </div>
+        {listOfPosts.map((value, key) => {
+          return (
+            <div className="post">
+              <div className="post-body">
                 <div
-                  className="body"
+                  className="user"
+                  onClick={() => {
+                    navigate(`profile/${value.UserId}`);
+                  }}
+                >
+                  <AccountCircleIcon sx={{ color: grey[600], fontSize: 40 }} />
+                  {/* <AccountCircleIcon sx={{ color: "white", fontSize: 40 }} /> */}
+
+                  <div className="username">
+                    {/* <Link to={`/profile/${value.UserId}`}>{value.username}</Link> */}
+                    {value.username}
+                  </div>
+                </div>
+                {/* <div className="post-body"> */}
+                <div className="post-text-container center-vertical">
+                  {/* <div className="post-text"> */}
+                  {/* <div className="title">{value.title}: </div> */}
+                  <div
+                    className="body"
+                    onClick={() => {
+                      navigate(`/post/${value.id}`);
+                    }}
+                  ></div>
+                  {value.postText}
+                </div>
+                {/* </div> */}
+              </div>
+              <div className="footer">
+                <CommentOutlinedIcon
+                  sx={{ color: grey[600] }}
+                  // sx={{ color: "white" }}
                   onClick={() => {
                     navigate(`/post/${value.id}`);
                   }}
-                ></div>
-                {value.postText}
+                />
+                <div className="likes">
+                  <ThumbUpOutlinedIcon
+                    sx={{ color: grey[600] }}
+                    // sx={{ color: "white" }}
+                    onClick={() => likePost(value.id)}
+                    className={
+                      likedPosts.includes(value.id) ? "unlikeBttn" : "likeBttn" //TO DO: create unlikeBttn and likeBttn class
+                    }
+                  />
+                  <label> {value.Likes.length} </label>
+                </div>
+                <RepeatOutlinedIcon sx={{ color: grey[600] }} />
+                {/* <RepeatOutlinedIcon sx={{ color: "white" }} /> */}
+                <FileUploadOutlinedIcon sx={{ color: grey[600] }} />
+                {/* <FileUploadOutlinedIcon sx={{ color: "white" }} /> */}
+                {/* <FileUploadOutlinedIcon sx={{ color: "white" }} /> */}
+                {/* <div className="username">
+                <Link to={`/profile/${value.UserId}`}>{value.username}</Link>
+              </div> */}
+                {/* <div className="comment-button">Comments</div> */}
+                {/* <label> {value.Likes.length} </label> */}
               </div>
               {/* </div> */}
             </div>
-            <div className="footer">
-              <CommentOutlinedIcon
-                sx={{ color: grey[600] }}
-                onClick={() => {
-                  navigate(`/post/${value.id}`);
-                }}
-              />
-              <div className="likes">
-                <ThumbUpOutlinedIcon
-                  sx={{ color: grey[600] }}
-                  onClick={() => likePost(value.id)}
-                  className={
-                    likedPosts.includes(value.id) ? "unlikeBttn" : "likeBttn" //TO DO: create unlikeBttn and likeBttn class
-                  }
-                />
-                <label> {value.Likes.length} </label>
-              </div>
-              <RepeatOutlinedIcon sx={{ color: grey[600] }} />
-              <FileUploadOutlinedIcon sx={{ color: grey[600] }} />
-              {/* <div className="username">
-                <Link to={`/profile/${value.UserId}`}>{value.username}</Link>
-              </div> */}
-              {/* <div className="comment-button">Comments</div> */}
-              {/* <label> {value.Likes.length} </label> */}
-            </div>
-            {/* </div> */}
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }

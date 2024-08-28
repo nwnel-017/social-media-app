@@ -111,18 +111,27 @@ function Home() {
   return (
     <div className="homepage">
       <div className="side-panel flex-box flex-center light-background">
-        <div className="flex-top-half flex-center">
-          <div
-            className="user"
-            onClick={() => {
-              navigate(`profile/${authState.username}`);
-            }}
-          >
-            <AccountCircleIcon sx={{ color: grey[600], fontSize: 80 }} />
-            <div className="username">{authState.username}</div>
+        {/* <div className="flex-box flex-column"> */}
+        <div className="flex-half space-evenly">
+          <div className="flex-box flex-center">
+            <div
+              className="user"
+              onClick={() => {
+                navigate(`profile/${authState.username}`);
+              }}
+            >
+              <AccountCircleIcon sx={{ color: grey[600], fontSize: 80 }} />
+              <div className="flex-box flex-center row">
+                {authState.username}
+              </div>
+            </div>
           </div>
+          <div className="divider"></div>
         </div>
+        {/* <div className="flex-half space-evenly"></div> */}
+        {/* </div> */}
       </div>
+
       <div className="feed light-background">
         <div className="createPost">
           <div className="user">

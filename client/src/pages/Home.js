@@ -15,6 +15,8 @@ import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import GifBoxOutlinedIcon from "@mui/icons-material/GifBoxOutlined";
 import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { AuthContext } from "../helpers/AuthContext";
 import { blue, blueGrey, grey } from "@mui/material/colors";
 
@@ -110,8 +112,7 @@ function Home() {
 
   return (
     <div className="homepage">
-      <div className="side-panel flex-box flex-center light-background">
-        {/* <div className="flex-box flex-column"> */}
+      <div className="side-panel flex-box flex-center flex-column">
         <div className="flex-half space-evenly">
           <div className="flex-box flex-center">
             <div
@@ -128,8 +129,32 @@ function Home() {
           </div>
           <div className="divider"></div>
         </div>
-        {/* <div className="flex-half space-evenly"></div> */}
-        {/* </div> */}
+        <div className="flex-half space-evenly">
+          <div className="profile-option">
+            <div className="flex-box half">
+              <PeopleOutlineIcon sx={{ color: grey[600] }} />
+              <div className="pad center-vertical">Followers</div>
+            </div>
+          </div>
+          <div className="profile-option">
+            <div className="flex-box half">
+              <PeopleOutlineIcon sx={{ color: grey[600] }} />
+              <div className="pad center-vertical">Following</div>
+            </div>
+          </div>
+          <div className="profile-option">
+            <div className="flex-box half">
+              <AccountCircleIcon sx={{ color: grey[600] }} />
+              <div className="pad center-vertical">Profile</div>
+            </div>
+          </div>
+          <div className="profile-option">
+            <div className="flex-box half">
+              <SettingsOutlinedIcon sx={{ color: grey[600] }} />
+              <div className="pad center-vertical">Settings</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="feed light-background">

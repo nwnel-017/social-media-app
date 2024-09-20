@@ -4,6 +4,7 @@ const { Users } = require("../models");
 const bcrypt = require("bcrypt");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 const { sign } = require("jsonwebtoken");
+const { follow, unfollow } = require("../controller/FollowersController");
 
 //create user
 router.post("/", async (req, res) => {
@@ -43,6 +44,12 @@ router.post("/login", async (req, res) => {
   }
 });
 
+//To Do: follow user
+router.post("/follow/:id", validateToken, follow);
+
+//To Do: unfollow user
+router.post("/unfollow/:id", validateToken, unfollow);
+
 //authorize
 router.get("/auth", validateToken, (req, res) => {
   res.json(req.user);
@@ -59,6 +66,7 @@ router.get("/basicInfo/:id", async (req, res) => {
   res.json(basicInfo);
 });
 
+//change user's password
 router.put("/changepassword", validateToken, async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const user = await Users.findOne({ where: { username: req.user.username } }); //we get username from validateToken

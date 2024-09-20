@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken"); //testing purposes
 
 const validateToken = (req, res, next) => {
   const accessToken = req.header("accessToken");
+  console.log(accessToken);
 
   if (!accessToken) return res.json({ error: "User not logged in!" });
 

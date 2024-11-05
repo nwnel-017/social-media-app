@@ -21,8 +21,18 @@ function Profile() {
     });
   }, []);
 
+  const follow = (req, res) => {
+    console.log("attempting to make http request to follow user");
+    const id = req.params.id;
+    axios.post(`http://localhost:3001/auth/follow/${id}`, {
+      headers: { accessToken: localStorage.getItem("accessToken") },
+    });
+  };
+
+  //onclick follow added to test follow functionality
   return (
-    <div className="profilePageContainer">
+    <div className="profilePageContainer" onClick={follow}>
+      Follow
       <div className="basicInfo">
         <h1>Username: {username}</h1>
         {authState.username === username && (

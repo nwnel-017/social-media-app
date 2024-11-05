@@ -1,7 +1,7 @@
+//////////we should delete this page
 import React, { useContext } from "react";
 import axios from "axios";
 import Profile from "./Profile";
-import Feed from "./Feed";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -21,24 +21,26 @@ import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { AuthContext } from "../helpers/AuthContext";
 import { blue, blueGrey, grey } from "@mui/material/colors";
-import { create } from "@mui/material/styles/createTransitions";
 
-function Home({ exploreMode }) {
+function Feed({
+  exploreMode,
+  // listOfPosts,
+  // likedPosts,
+  // createPost,
+  // validationSchema,
+  // likePost,
+}) {
+  const navigate = useNavigate();
+  const { authState } = useContext(AuthContext);
   const [listOfPosts, setListOfPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
-  const { authState } = useContext(AuthContext);
 
-  const navigate = useNavigate();
-
-  //conditional useEffect hook
   useEffect(() => {
-    //here we need to write the code to either retreive posts of users we follow, or all posts
-    if (!localStorage.getItem("accessToken")) {
-      navigate("/login");
-    }
+    // if (!localStorage.getItem("accessToken")) {
+    //   navigate("/login");
+    // }
     axios
       .get("http://localhost:3001/posts", {
-        //create another route to get posts of every user vs users we follow
         headers: { accessToken: localStorage.getItem("accessToken") },
       })
       .then((response) => {
@@ -49,39 +51,13 @@ function Home({ exploreMode }) {
           })
         );
       });
-  }, [exploreMode]);
-
-  useEffect(() => {
-    //here we need to write the code to either retreive posts of users we follow, or all posts
-    if (!localStorage.getItem("accessToken")) {
-      navigate("/login");
-    }
-    axios
-      .get("http://localhost:3001/posts/following", {
-        //create another route to get posts of every user vs users we follow
-        headers: { accessToken: localStorage.getItem("accessToken") },
-      })
-      .then((response) => {
-        setListOfPosts(response.data.listOfPosts);
-        setLikedPosts(
-          response.data.likedPosts.map((like) => {
-            return like.PostId;
-          })
-        );
-      });
-  }, [!exploreMode]);
+  }, []);
 
   const initialValues = {
     title: "",
     postText: "",
     username: "",
   };
-
-  const validationSchema = Yup.object().shape({
-    // title: Yup.string().required(),
-    postText: Yup.string().required(),
-    // username: Yup.string().min(3).max(15).required(),
-  });
 
   const createPost = (data) => {
     console.log("creating post " + data);
@@ -96,6 +72,12 @@ function Home({ exploreMode }) {
         console.log(listOfPosts);
       });
   };
+
+  const validationSchema = Yup.object().shape({
+    // title: Yup.string().required(),
+    postText: Yup.string().required(),
+    // username: Yup.string().min(3).max(15).required(),
+  });
 
   const likePost = (postId) => {
     axios
@@ -138,16 +120,6 @@ function Home({ exploreMode }) {
       });
   };
 
-  // return (
-  //   <Feed
-  //     exploreMode={exploreMode}
-  //     // listOfPosts={listOfPosts}
-  //     // likedPosts={likedPosts}
-  //     // createPost={createPost}
-  //     // validationSchema={validationSchema}
-  //     // likePost={likePost}
-  //   />
-  // );
   return (
     <div className="homepage">
       <div className="side-panel flex-box flex-center flex-column">
@@ -235,7 +207,7 @@ function Home({ exploreMode }) {
             </Form>
           </Formik>
         </div>
-        {listOfPosts.map((value, key) => {
+        {listOfPosts?.map((value, key) => {
           return (
             <div className="post">
               <div className="post-body">
@@ -306,4 +278,4 @@ function Home({ exploreMode }) {
   );
 }
 
-export default Home;
+export default Feed;

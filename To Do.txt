@@ -1,0 +1,16 @@
+-Finish feed ui					----DONE
+-implement user / follower relation		----DONE
+-implement home page / explore page
+	-prop to indicate home vs 					----DONE
+	 explore mode
+	-should make api call directly from feed
+	 instead of passing posts as props
+	-use useInfiniteQuery() for infinite 
+	 scroll 
+-implement profile button for side panel
+
+
+
+
+
+*left off: creating new route /posts/following to retrieve only posts of users we follow

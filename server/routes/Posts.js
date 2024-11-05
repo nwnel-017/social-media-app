@@ -1,12 +1,32 @@
 const express = require("express");
 const router = express.Router();
-const { Posts, Likes } = require("../models");
+const { Posts, Likes, Followers, sequelize } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
+// const Followers = require("../models/Followers");
+const Users = require("../models/Users");
+const { DataTypes } = require("sequelize");
 
 router.get("/", validateToken, async (req, res) => {
   const listOfPosts = await Posts.findAll({ include: [Likes] }); //sequelize eager loading -> uses this to join tables
   const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
   res.json({ listOfPosts: listOfPosts, likedPosts: likedPosts });
+});
+
+//new route to get posts of users we are following
+router.get("/following", validateToken, async (req, res) => {
+  const id = req.user.id;
+  const followers = await Followers.findAll({
+    where: {
+      followerId: id,
+    },
+  });
+  const result = await followers.map((x) => x.userId);
+  const posts = await Posts.findAll({
+    where: {
+      UserId: result,
+    },
+  });
+  res.json(posts);
 });
 
 router.get("/byId/:id", async (req, res) => {

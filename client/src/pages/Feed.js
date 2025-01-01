@@ -23,101 +23,19 @@ import { AuthContext } from "../helpers/AuthContext";
 import { blue, blueGrey, grey } from "@mui/material/colors";
 
 function Feed({
-  exploreMode,
-  // listOfPosts,
-  // likedPosts,
-  // createPost,
-  // validationSchema,
-  // likePost,
+  listOfPosts,
+  likedPosts,
+  createPost,
+  validationSchema,
+  likePost,
 }) {
   const navigate = useNavigate();
   const { authState } = useContext(AuthContext);
-  const [listOfPosts, setListOfPosts] = useState([]);
-  const [likedPosts, setLikedPosts] = useState([]);
-
-  useEffect(() => {
-    // if (!localStorage.getItem("accessToken")) {
-    //   navigate("/login");
-    // }
-    axios
-      .get("http://localhost:3001/posts", {
-        headers: { accessToken: localStorage.getItem("accessToken") },
-      })
-      .then((response) => {
-        setListOfPosts(response.data.listOfPosts);
-        setLikedPosts(
-          response.data.likedPosts.map((like) => {
-            return like.PostId;
-          })
-        );
-      });
-  }, []);
 
   const initialValues = {
     title: "",
     postText: "",
     username: "",
-  };
-
-  const createPost = (data) => {
-    console.log("creating post " + data);
-    axios
-      .post("http://localhost:3001/posts", data, {
-        headers: { accessToken: localStorage.getItem("accessToken") },
-      })
-      .then((response) => {
-        // navigate("/");
-        setListOfPosts(response.data.listOfPosts);
-        console.log(response.data);
-        console.log(listOfPosts);
-      });
-  };
-
-  const validationSchema = Yup.object().shape({
-    // title: Yup.string().required(),
-    postText: Yup.string().required(),
-    // username: Yup.string().min(3).max(15).required(),
-  });
-
-  const likePost = (postId) => {
-    axios
-      .post(
-        "http://localhost:3001/likes",
-        { PostId: postId },
-        {
-          headers: {
-            accessToken: localStorage.getItem("accessToken"),
-          },
-        }
-      )
-      .then((response) => {
-        setListOfPosts(
-          listOfPosts.map((post) => {
-            //this can modify attributes of post without changing them all
-            if (post.id === postId) {
-              if (response.data.liked) {
-                return { ...post, Likes: [...post.Likes, 0] }; //if post is the one we liked, we are keeping same post, but in likes array -> keeping array but adding one more element (0) to end
-              } else {
-                const likesArray = post.Likes;
-                likesArray.pop(); //js method that removes the last item of an array
-                return { ...post, Likes: likesArray };
-              }
-            } else {
-              return post;
-            }
-          })
-        );
-
-        if (likedPosts.includes(postId)) {
-          setLikedPosts(
-            likedPosts.filter((id) => {
-              return id !== postId;
-            })
-          );
-        } else {
-          setLikedPosts([...likedPosts, postId]);
-        }
-      });
   };
 
   return (

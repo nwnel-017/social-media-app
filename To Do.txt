@@ -1,12 +1,10 @@
 -Finish feed ui					----DONE
 -implement user / follower relation		----DONE
--implement home page / explore page
-	-prop to indicate home vs 					----DONE
-	 explore mode
-	-should make api call directly from feed
+-implement home page / explore page		----DONE
+	-should make api call directly from feed	---DONE
 	 instead of passing posts as props
 	-use useInfiniteQuery() for infinite 
-	 scroll 
+	 scroll 								-----Unsure if we are going to use yet
 -implement profile button for side panel
 
 

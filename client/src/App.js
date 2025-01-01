@@ -2,7 +2,6 @@ import "./App.css";
 import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import CreatePost from "./pages/CreatePost";
 import Post from "./pages/Post";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
@@ -14,7 +13,6 @@ import axios from "axios";
 import ChangePassword from "./pages/ChangePassword";
 
 function App() {
-  // const navigate = useNavigate(); //error with this -> we need to move Router higher up in react tree
   const [authState, setAuthState] = useState({
     username: "",
     id: 0,
@@ -49,7 +47,7 @@ function App() {
   const logout = () => {
     localStorage.removeItem("accessToken");
     setAuthState(false);
-    window.location.reload(false); //force to reload so we return to login page
+    window.location.reload(false); //force reload to return to login page
   };
 
   return (
@@ -67,15 +65,9 @@ function App() {
                 <div className="banner">
                   <Link to="/">Home Page</Link>
                   <Link to="/explore">Explore Page</Link>
-                  {/* <Link to="/createpost">Create a Post</Link> */}
                   <button onClick={logout}>Logout</button>
                 </div>
-                {/* <div className="feed"> */}
-                <div className="createPost">
-                  {/* <div className="profilepic"></div> */}
-                  {/* <Link to="/createpost">Create a Post</Link> */}
-                </div>
-                {/* </div> */}
+                {/* <div className="profilepic"></div> */}
               </>
             )}
           </div>

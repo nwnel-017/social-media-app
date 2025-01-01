@@ -59,9 +59,13 @@ router.get("/auth", validateToken, (req, res) => {
 router.get("/basicInfo/:id", async (req, res) => {
   const id = req.params.id;
 
+  console.log("id from request: " + id);
+
   const basicInfo = await Users.findByPk(id, {
     attributes: { exclude: ["password"] },
   });
+
+  console.log("profile info from route: " + basicInfo);
 
   res.json(basicInfo);
 });

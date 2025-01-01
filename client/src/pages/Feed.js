@@ -1,9 +1,6 @@
-//////////we should delete this page
 import React, { useContext } from "react";
 import axios from "axios";
-import Profile from "./Profile";
-import { useEffect, useState } from "react";
-import { Navigate, useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
@@ -22,13 +19,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { AuthContext } from "../helpers/AuthContext";
 import { blue, blueGrey, grey } from "@mui/material/colors";
 
-function Feed({
-  listOfPosts,
-  likedPosts,
-  createPost,
-  validationSchema,
-  likePost,
-}) {
+function Feed({ listOfPosts, likedPosts }) {
   const navigate = useNavigate();
   const { authState } = useContext(AuthContext);
 
@@ -37,6 +28,40 @@ function Feed({
     postText: "",
     username: "",
   };
+
+  const createPost = (data) => {
+    console.log("creating post " + data);
+    axios
+      .post("http://localhost:3001/posts", data, {
+        headers: { accessToken: localStorage.getItem("accessToken") },
+      })
+      .then((response) => {
+        console.log("setting list of posts after post request");
+        console.log(response.data);
+        window.location.reload(false);
+      });
+  };
+
+  const likePost = (postId) => {
+    axios
+      .post(
+        "http://localhost:3001/likes",
+        { PostId: postId },
+        {
+          headers: {
+            accessToken: localStorage.getItem("accessToken"),
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        window.location.reload(false);
+      });
+  };
+
+  const validationSchema = Yup.object().shape({
+    postText: Yup.string().max(500).required(),
+  });
 
   return (
     <div className="homepage">
@@ -47,7 +72,7 @@ function Feed({
               className="user"
               onClick={() => {
                 console.log(authState.username);
-                navigate(`profile/${authState.username}`);
+                navigate(`profile/${authState.id}`);
               }}
             >
               <AccountCircleIcon sx={{ color: grey[600], fontSize: 80 }} />
@@ -75,7 +100,7 @@ function Feed({
             <div
               className="flex-box half"
               onClick={() => {
-                navigate(`profile/${authState.username}`);
+                navigate(`profile/${authState.id}`);
               }}
             >
               <AccountCircleIcon sx={{ color: grey[600] }} />

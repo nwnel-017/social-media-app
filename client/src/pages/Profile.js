@@ -13,6 +13,7 @@ function Profile() {
 
   useEffect(() => {
     axios.get(`http://localhost:3001/auth/basicInfo/${id}`).then((response) => {
+      console.log("response from basic info get request: " + response.data);
       setUsername(response.data.username);
     });
 

@@ -1,13 +1,7 @@
 import "./App.css";
 import Home from "./pages/Home";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  // Navigate,
-  // useNavigate,
-} from "react-router-dom";
+import Explore from "./pages/Explore";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import CreatePost from "./pages/CreatePost";
 import Post from "./pages/Post";
 import Login from "./pages/Login";
@@ -26,8 +20,6 @@ function App() {
     id: 0,
     status: false,
   });
-
-  const exploreMode = false;
 
   useEffect(() => {
     axios
@@ -57,15 +49,7 @@ function App() {
   const logout = () => {
     localStorage.removeItem("accessToken");
     setAuthState(false);
-    // navigate("/login");  To Do: figure out how to automatically navigate to login page
-  };
-
-  const setExploreMode = () => {
-    exploreMode = true;
-  };
-
-  const setHomeMode = () => {
-    exploreMode = false;
+    window.location.reload(false); //force to reload so we return to login page
   };
 
   return (
@@ -81,10 +65,8 @@ function App() {
             ) : (
               <>
                 <div className="banner">
-                  <Link to="/" onClick={setHomeMode}>
-                    Home Page
-                  </Link>
-                  <button onClick={setExploreMode}>Explore</button>
+                  <Link to="/">Home Page</Link>
+                  <Link to="/explore">Explore Page</Link>
                   {/* <Link to="/createpost">Create a Post</Link> */}
                   <button onClick={logout}>Logout</button>
                 </div>
@@ -98,8 +80,8 @@ function App() {
             )}
           </div>
           <Routes>
-            <Route path="/" exact Component={Home} exploreMode={exploreMode} />
-            {/* <Route path="/createpost" exact Component={CreatePost} /> */}
+            <Route path="/" exact Component={Home} />
+            <Route path="/explore" exact Component={Explore} />
             <Route path="/post/:id" exact Component={Post} />
             <Route path="/login" exact Component={Login} />
             <Route path="/registration" exact Component={Registration} />

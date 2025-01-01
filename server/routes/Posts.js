@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { Posts, Likes, Followers, sequelize } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
-// const Followers = require("../models/Followers");
 const Users = require("../models/Users");
 const { DataTypes } = require("sequelize");
 
@@ -20,13 +19,15 @@ router.get("/following", validateToken, async (req, res) => {
       followerId: id,
     },
   });
-  const result = await followers.map((x) => x.userId);
-  const posts = await Posts.findAll({
+  const followerIds = await followers.map((x) => x.userId);
+  const listOfPosts = await Posts.findAll({
     where: {
-      UserId: result,
+      UserId: [id, ...followerIds],
     },
+    include: [Likes],
   });
-  res.json(posts);
+  const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
+  res.json({ listOfPosts: listOfPosts, likedPosts: likedPosts });
 });
 
 router.get("/byId/:id", async (req, res) => {
@@ -52,12 +53,6 @@ router.post("/", validateToken, async (req, res) => {
   await Posts.create(post);
   res.json(post);
 });
-
-// router.put("/title", validateToken, async (req, res) => {
-//   const { newTitle, id } = req.body;
-//   await Posts.update({ title: newTitle }, { where: { id: id } });
-//   res.json(newTitle);
-// });
 
 router.put("/postText", validateToken, async (req, res) => {
   const { newText, id } = req.body;

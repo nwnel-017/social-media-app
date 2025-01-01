@@ -23,7 +23,7 @@ import { AuthContext } from "../helpers/AuthContext";
 import { blue, blueGrey, grey } from "@mui/material/colors";
 import { create } from "@mui/material/styles/createTransitions";
 
-function Home({ exploreMode }) {
+function Home() {
   const [listOfPosts, setListOfPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const { authState } = useContext(AuthContext);
@@ -32,44 +32,27 @@ function Home({ exploreMode }) {
 
   //conditional useEffect hook
   useEffect(() => {
-    //here we need to write the code to either retreive posts of users we follow, or all posts
+    //if we have an access token - then retreive posts of users we follow
     if (!localStorage.getItem("accessToken")) {
+      console.log("no access token found from home");
       navigate("/login");
-    }
-    axios
-      .get("http://localhost:3001/posts", {
-        //create another route to get posts of every user vs users we follow
-        headers: { accessToken: localStorage.getItem("accessToken") },
-      })
-      .then((response) => {
-        setListOfPosts(response.data.listOfPosts);
-        setLikedPosts(
-          response.data.likedPosts.map((like) => {
-            return like.PostId;
-          })
-        );
-      });
-  }, [exploreMode]);
+    } else {
+      axios
+        .get("http://localhost:3001/posts/following", {
+          headers: { accessToken: localStorage.getItem("accessToken") },
+        })
+        .then((response) => {
+          setListOfPosts(response.data.listOfPosts);
 
-  useEffect(() => {
-    //here we need to write the code to either retreive posts of users we follow, or all posts
-    if (!localStorage.getItem("accessToken")) {
-      navigate("/login");
+          setLikedPosts(
+            response.data.likedPosts.map((like) => {
+              return like.PostId;
+            })
+          );
+        });
+      console.log(listOfPosts);
     }
-    axios
-      .get("http://localhost:3001/posts/following", {
-        //create another route to get posts of every user vs users we follow
-        headers: { accessToken: localStorage.getItem("accessToken") },
-      })
-      .then((response) => {
-        setListOfPosts(response.data.listOfPosts);
-        setLikedPosts(
-          response.data.likedPosts.map((like) => {
-            return like.PostId;
-          })
-        );
-      });
-  }, [!exploreMode]);
+  }, []);
 
   const initialValues = {
     title: "",
@@ -78,8 +61,7 @@ function Home({ exploreMode }) {
   };
 
   const validationSchema = Yup.object().shape({
-    // title: Yup.string().required(),
-    postText: Yup.string().required(),
+    postText: Yup.string().max(500).required(),
     // username: Yup.string().min(3).max(15).required(),
   });
 
@@ -91,9 +73,9 @@ function Home({ exploreMode }) {
       })
       .then((response) => {
         // navigate("/");
-        setListOfPosts(response.data.listOfPosts);
+        console.log("setting list of posts after post request");
         console.log(response.data);
-        console.log(listOfPosts);
+        window.location.reload(false);
       });
   };
 
@@ -287,17 +269,8 @@ function Home({ exploreMode }) {
                   <label> {value.Likes.length} </label>
                 </div>
                 <RepeatOutlinedIcon sx={{ color: grey[600] }} />
-                {/* <RepeatOutlinedIcon sx={{ color: "white" }} /> */}
                 <FileUploadOutlinedIcon sx={{ color: grey[600] }} />
-                {/* <FileUploadOutlinedIcon sx={{ color: "white" }} /> */}
-                {/* <FileUploadOutlinedIcon sx={{ color: "white" }} /> */}
-                {/* <div className="username">
-                <Link to={`/profile/${value.UserId}`}>{value.username}</Link>
-              </div> */}
-                {/* <div className="comment-button">Comments</div> */}
-                {/* <label> {value.Likes.length} </label> */}
               </div>
-              {/* </div> */}
             </div>
           );
         })}

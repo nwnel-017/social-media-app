@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Registration from "./pages/Registration";
 import Profile from "./pages/Profile";
 import PageNotFound from "./pages/PageNotFound";
+import Settings from "./pages/Settings";
 import { AuthContext } from "./helpers/AuthContext";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -79,6 +80,7 @@ function App() {
             <Route path="/registration" exact Component={Registration} />
             <Route path="/profile/:id" exact Component={Profile}></Route>
             <Route path="/changepassword" exact Component={ChangePassword} />
+            <Route path="/settings" exact Component={Settings} />
             <Route path="*" exact Component={PageNotFound} />
           </Routes>
         </Router>

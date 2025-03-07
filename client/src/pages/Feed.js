@@ -108,7 +108,12 @@ function Feed({ listOfPosts, likedPosts }) {
             </div>
           </div>
           <div className="profile-option">
-            <div className="flex-box half">
+            <div
+              className="flex-box half"
+              onClick={() => {
+                navigate("settings");
+              }}
+            >
               <SettingsOutlinedIcon sx={{ color: grey[600] }} />
               <div className="pad center-vertical">Settings</div>
             </div>
@@ -120,7 +125,6 @@ function Feed({ listOfPosts, likedPosts }) {
         <div className="createPost">
           <div className="user">
             <AccountCircleIcon sx={{ color: grey[600], fontSize: 80 }} />
-            {/* <AccountCircleIcon sx={{ color: "white", fontSize: 80 }} /> */}
           </div>
           <Formik
             initialValues={initialValues}
@@ -175,6 +179,7 @@ function Feed({ listOfPosts, likedPosts }) {
                   <div
                     className="body"
                     onClick={() => {
+                      console.log("navigating to post");
                       navigate(`/post/${value.id}`);
                     }}
                   ></div>

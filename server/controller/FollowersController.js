@@ -35,14 +35,24 @@ class FollowersController {
 
     try {
       const userToUnfollow = await Users.findByPk(followingId);
-      const existingFollower = userToUnfollow.hasFollower(followerId);
-      console.log("existing follower: " + JSON.stringify(existingFollower));
-      if (Object.keys(existingFollower).length == 0) {
-        return response.status(400).send({
-          message: "Attempting to unfollow user who is not followed",
+      if (!userToUnfollow) {
+        return response.status(404).json({
+          message: "User to unfollow not found",
         });
       }
+
+      // Check if the current user is following the target user
+      const isFollowing = userToUnfollow.hasFollower(followerId);
+      if (!isFollowing) {
+        return response.status(400).json({
+          message: "You are not following this user",
+        });
+      }
+
+      // Remove the follower relationship
       await userToUnfollow.removeFollower(followerId);
+
+      //send success response
       response.status(200).json({ status: "unfollowed successfully" });
     } catch (error) {
       next(error);

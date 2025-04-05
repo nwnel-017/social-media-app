@@ -72,7 +72,7 @@ function Feed({ listOfPosts, likedPosts }) {
               className="user"
               onClick={() => {
                 console.log(authState.username);
-                navigate(`profile/${authState.id}`);
+                navigate(`/profile/${authState.id}`);
               }}
             >
               <AccountCircleIcon sx={{ color: grey[600], fontSize: 80 }} />
@@ -100,7 +100,7 @@ function Feed({ listOfPosts, likedPosts }) {
             <div
               className="flex-box half"
               onClick={() => {
-                navigate(`profile/${authState.id}`);
+                navigate(`/profile/${authState.id}`);
               }}
             >
               <AccountCircleIcon sx={{ color: grey[600] }} />
@@ -161,7 +161,7 @@ function Feed({ listOfPosts, likedPosts }) {
                 <div
                   className="user"
                   onClick={() => {
-                    navigate(`profile/${value.UserId}`);
+                    navigate(`/profile/${value.UserId}`);
                   }}
                 >
                   <AccountCircleIcon sx={{ color: grey[600], fontSize: 40 }} />

@@ -75,6 +75,11 @@
   align-content: center;
 }
 
+.profilePageContainer {
+  background: var(--background-color);
+  color: var(--text-color);
+}
+
 .half {
   width: 40%;
 }
@@ -145,6 +150,13 @@
   /* top: 20%; */
 
   background: linear-gradient(180deg, #5e5e5e 0%, rgba(94, 94, 94, 0.14) 100%);
+}
+
+#follow-button {
+  width: 10%;
+  height: 10%;
+  left: 0px;
+  font-size: 14px;
 }
 
 #inputCreatePost {
@@ -360,10 +372,7 @@
   position: relative;
   width: 222px;
   height: 42px;
-  /* left: 782px; */
-  /* top: 202px; */
 
-  /* font-family: "Roboto"; */
   font-style: normal;
   font-weight: 400;
   font-size: 30px;

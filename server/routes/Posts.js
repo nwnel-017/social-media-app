@@ -19,7 +19,7 @@ router.get("/following", validateToken, async (req, res) => {
       followerId: id,
     },
   });
-  const followerIds = await followers.map((x) => x.userId);
+  const followerIds = await followers.map((x) => x.followedId);
   const listOfPosts = await Posts.findAll({
     where: {
       UserId: [id, ...followerIds],

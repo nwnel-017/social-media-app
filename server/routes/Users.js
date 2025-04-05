@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Users } = require("../models");
+const { Users, Followers } = require("../models");
 const bcrypt = require("bcrypt");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 const { sign } = require("jsonwebtoken");
@@ -45,7 +45,7 @@ router.post("/login", async (req, res) => {
 });
 
 //To Do: follow user
-router.post("/follow/:id", validateToken, follow);
+router.post("/follow/:id", validateToken, follow); //we get here and call midware successfully
 
 //To Do: unfollow user
 router.post("/unfollow/:id", validateToken, unfollow);
@@ -53,6 +53,40 @@ router.post("/unfollow/:id", validateToken, unfollow);
 //authorize
 router.get("/auth", validateToken, (req, res) => {
   res.json(req.user);
+});
+
+// Route to check if the current user is following the target user
+router.get("/follow-status/:id", validateToken, async (req, res) => {
+  const currentUserId = req.user.id; // User id from token (the current user)
+  const targetUserId = req.params.id; // The target user's id from URL params
+  console.log(
+    "from follow status route: currentUserId = " +
+      currentUserId +
+      " targetUserId = " +
+      targetUserId
+  ); //this works
+  try {
+    // Check if the current user is following the target user
+    const following = await Followers.findOne({
+      where: {
+        followerId: currentUserId,
+        followedId: targetUserId,
+      },
+    });
+
+    console.log("user that we are following: " + following);
+
+    // If `following` is found, the user is following, else not following
+    const isFollowing = following ? true : false;
+
+    // Send the result back
+    res.json({ isFollowing });
+  } catch (error) {
+    console.error("Error checking follow status:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while checking follow status" });
+  }
 });
 
 //basic info for profile

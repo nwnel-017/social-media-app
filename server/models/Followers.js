@@ -5,7 +5,14 @@ module.exports = (sequelize, DataTypes) => {
     followerId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Users,
+        model: "Users", // Assuming the Users table name is 'Users'
+        key: "id",
+      },
+    },
+    followedId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Users", // Assuming the Users table name is 'Users'
         key: "id",
       },
     },

@@ -14,7 +14,6 @@ function Explore() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    //here we need to write the code to either retreive posts of users we follow, or all posts
     if (!localStorage.getItem("accessToken")) {
       navigate("/login");
     } else {

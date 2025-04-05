@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "cascade",
     });
     Users.belongsToMany(models.Users, {
-      foreignKey: "userId",
+      foreignKey: "followedId",
       as: "follower",
       through: models.Followers,
     });

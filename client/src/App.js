@@ -63,12 +63,22 @@ function App() {
               </>
             ) : (
               <>
-                <div className="banner">
-                  <Link to="/">Home Page</Link>
-                  <Link to="/explore">Explore Page</Link>
-                  <button onClick={logout}>Logout</button>
-                </div>
-                {/* <div className="profilepic"></div> */}
+                <header className="navbar">
+                  <div className="navbar-left">
+                    <h1 className="logo">MyApp</h1>
+                  </div>
+                  <nav className="navbar-right">
+                    <Link to="/" className="nav-link">
+                      Home
+                    </Link>
+                    <Link to="/explore" className="nav-link">
+                      Explore
+                    </Link>
+                    <button className="logout-btn" onClick={logout}>
+                      Logout
+                    </button>
+                  </nav>
+                </header>
               </>
             )}
           </div>

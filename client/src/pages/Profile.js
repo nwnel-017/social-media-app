@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams, Navigate, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import { AuthContext } from "../helpers/AuthContext";
 import axios from "axios";
@@ -22,7 +22,7 @@ function Profile() {
             headers: { accessToken: localStorage.getItem("accessToken") },
           }
         );
-        setIsFollowing(response.data.isFollowing); // Adjust based on your API response
+        setIsFollowing(response.data.isFollowing);
       } catch (error) {
         console.error("Error fetching follow status:", error);
       }
@@ -31,7 +31,6 @@ function Profile() {
     fetchFollowStatus();
 
     axios.get(`http://localhost:3001/auth/basicInfo/${id}`).then((response) => {
-      console.log("response from basic info get request: " + response.data);
       setUsername(response.data.username);
     });
 
@@ -40,32 +39,22 @@ function Profile() {
     });
   }, [id]);
 
-  const handleFollowUnfollow = async (req, res) => {
-    if (loading) return; // Prevent multiple clicks while loading
+  const handleFollowUnfollow = async () => {
+    if (loading) return;
     setLoading(true);
-    console.log("attempting to make http request to follow user: " + id);
     try {
       const url = isFollowing
         ? `http://localhost:3001/auth/unfollow/${id}`
         : `http://localhost:3001/auth/follow/${id}`;
 
-      console.log("attempting to call: " + url);
-      // Make API request to follow/unfollow
-      await axios
-        .post(
-          url,
-          {},
-          {
-            headers: { accessToken: localStorage.getItem("accessToken") },
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      // Toggle the follow/unfollow state
+      await axios.post(
+        url,
+        {},
+        {
+          headers: { accessToken: localStorage.getItem("accessToken") },
+        }
+      );
+
       setIsFollowing(!isFollowing);
     } catch (error) {
       console.error("Error during follow/unfollow:", error);
@@ -74,48 +63,41 @@ function Profile() {
     }
   };
 
-  //onclick follow added to test follow functionality
-  //need to add id to params when calling follow function
   return (
-    <div className="profilePageContainer" onClick={handleFollowUnfollow}>
-      <div className="basicInfo">
-        <h1>Username: {username}</h1>
-        {authState.username === username && (
+    <div className="profile-container">
+      <div className="profile-header">
+        <h1>{username}</h1>
+        {authState.username === username ? (
           <button
-            onClick={() => {
-              navigate("/changepassword");
-            }}
+            className="profile-button"
+            onClick={() => navigate("/changepassword")}
           >
             Change Password
           </button>
-        )}
-        {authState.username !== username && (
-          <button className="button-submit" id="follow-button">
+        ) : (
+          <button className="profile-button" onClick={handleFollowUnfollow}>
             {isFollowing ? "Unfollow" : "Follow"}
           </button>
         )}
       </div>
-      <div className="listOfPosts">
-        {listOfPosts.map((value, key) => {
-          return (
-            <div className="post">
-              <div className="title">{value.title}</div>
-              <div
-                className="body"
-                onClick={() => {
-                  navigate(`/post/${value.id}`);
-                }}
-              >
-                {value.postText}
-              </div>
-              <div className="footer">
-                {value.userName}
-                {""}
-                <label>{value.Likes.length} Likes</label>
-              </div>
+
+      <div className="posts-grid">
+        {listOfPosts.map((value, key) => (
+          <div
+            key={key}
+            className="post-card"
+            onClick={() => navigate(`/post/${value.id}`)}
+          >
+            <h3 className="post-title">{value.title}</h3>
+            <p className="post-body">{value.postText}</p>
+            <div className="post-footer">
+              <span className="likes">
+                <ThumbUpAltIcon style={{ fontSize: "16px" }} />
+                {value.Likes.length}
+              </span>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -44,10 +44,9 @@ function Post() {
           console.log(response.data.error);
         } else {
           const commentToAdd = {
+            id: response.data.id, // ✅ now we include the comment ID returned from backend
             commentBody: newComment,
             username: response.data.username,
-            //id: response.data.id,
-            //were not giving an id here, i think this is why id is undefined when we try to delete
           };
           setComments([...comments, commentToAdd]);
           setNewComment("");

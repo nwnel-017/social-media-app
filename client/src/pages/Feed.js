@@ -3,9 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-import CommentIcon from "@mui/icons-material/Comment";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import RepeatOutlinedIcon from "@mui/icons-material/RepeatOutlined";
@@ -16,30 +15,24 @@ import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+
+import "../App.css";
 import { AuthContext } from "../helpers/AuthContext";
-import { blue, blueGrey, grey } from "@mui/material/colors";
 
 function Feed({ listOfPosts, likedPosts }) {
   const navigate = useNavigate();
   const { authState } = useContext(AuthContext);
 
   const initialValues = {
-    title: "",
     postText: "",
-    username: "",
   };
 
   const createPost = (data) => {
-    console.log("creating post " + data);
     axios
       .post("http://localhost:3001/posts", data, {
         headers: { accessToken: localStorage.getItem("accessToken") },
       })
-      .then((response) => {
-        console.log("setting list of posts after post request");
-        console.log(response.data);
-        window.location.reload(false);
-      });
+      .then(() => window.location.reload());
   };
 
   const likePost = (postId) => {
@@ -48,180 +41,105 @@ function Feed({ listOfPosts, likedPosts }) {
         "http://localhost:3001/likes",
         { PostId: postId },
         {
-          headers: {
-            accessToken: localStorage.getItem("accessToken"),
-          },
+          headers: { accessToken: localStorage.getItem("accessToken") },
         }
       )
-      .then((response) => {
-        console.log(response);
-        window.location.reload(false);
-      });
+      .then(() => window.location.reload());
   };
 
   const validationSchema = Yup.object().shape({
-    postText: Yup.string().max(500).required(),
+    postText: Yup.string().max(500).required("Post cannot be empty"),
   });
 
   return (
-    <div className="homepage">
-      <div className="side-panel flex-box flex-center flex-column">
-        <div className="flex-half space-evenly">
-          <div className="flex-box flex-center">
-            <div
-              className="user"
-              onClick={() => {
-                console.log(authState.username);
-                navigate(`/profile/${authState.id}`);
-              }}
-            >
-              <AccountCircleIcon sx={{ color: grey[600], fontSize: 80 }} />
-              <div className="flex-box flex-center row">
-                {authState.username}
-              </div>
-            </div>
-          </div>
-          <div className="divider"></div>
+    <div className="feed-container">
+      <aside className="sidebar">
+        <div
+          className="profile-card"
+          onClick={() => navigate(`/profile/${authState.id}`)}
+        >
+          <AccountCircleIcon className="icon-large" />
+          <div className="username">{authState.username}</div>
         </div>
-        <div className="flex-half space-evenly">
-          <div className="profile-option">
-            <div className="flex-box half">
-              <PeopleOutlineIcon sx={{ color: grey[600] }} />
-              <div className="pad center-vertical">Followers</div>
-            </div>
+        <div className="sidebar-options">
+          <div className="option">
+            <PeopleOutlineIcon /> Followers
           </div>
-          <div className="profile-option">
-            <div className="flex-box half">
-              <PeopleOutlineIcon sx={{ color: grey[600] }} />
-              <div className="pad center-vertical">Following</div>
-            </div>
+          <div className="option">
+            <PeopleOutlineIcon /> Following
           </div>
-          <div className="profile-option">
-            <div
-              className="flex-box half"
-              onClick={() => {
-                navigate(`/profile/${authState.id}`);
-              }}
-            >
-              <AccountCircleIcon sx={{ color: grey[600] }} />
-              <div className="pad center-vertical">Profile</div>
-            </div>
+          <div
+            className="option"
+            onClick={() => navigate(`/profile/${authState.id}`)}
+          >
+            <AccountCircleIcon /> Profile
           </div>
-          <div className="profile-option">
-            <div
-              className="flex-box half"
-              onClick={() => {
-                navigate("settings");
-              }}
-            >
-              <SettingsOutlinedIcon sx={{ color: grey[600] }} />
-              <div className="pad center-vertical">Settings</div>
-            </div>
+          <div className="option" onClick={() => navigate("/settings")}>
+            <SettingsOutlinedIcon /> Settings
           </div>
         </div>
-      </div>
+      </aside>
 
-      <div className="feed light-background">
-        <div className="createPost">
-          <div className="user">
-            <AccountCircleIcon sx={{ color: grey[600], fontSize: 80 }} />
-          </div>
+      <main className="feed">
+        <div className="create-post">
+          <AccountCircleIcon className="icon-medium" />
           <Formik
             initialValues={initialValues}
             onSubmit={createPost}
             validationSchema={validationSchema}
           >
-            <Form className="center-vertical">
-              <div className="form-container">
-                <ErrorMessage name="postText" component="span" />
-                <Field
-                  id="inputCreatePost"
-                  name="postText"
-                  placeHolder="What's going on"
-                ></Field>
-                <div>
-                  <div className="space-between margin-top">
-                    <ImageOutlinedIcon />
-                    <GifBoxOutlinedIcon />
-                    <EmojiEmotionsOutlinedIcon />
-                    <LocationOnOutlinedIcon />
-                    <button type="submit" id="submit-new-post">
-                      Create Post
-                    </button>
-                  </div>
-                </div>
+            <Form className="post-form">
+              <ErrorMessage name="postText" component="div" className="error" />
+              <Field
+                name="postText"
+                placeholder="What's on your mind?"
+                className="post-input"
+              />
+              <div className="post-actions">
+                <ImageOutlinedIcon />
+                <GifBoxOutlinedIcon />
+                <EmojiEmotionsOutlinedIcon />
+                <LocationOnOutlinedIcon />
+                <button type="submit" className="post-button">
+                  Post
+                </button>
               </div>
             </Form>
           </Formik>
         </div>
-        {listOfPosts?.map((value, key) => {
-          return (
-            <div className="post">
-              <div className="post-body">
-                <div
-                  className="user"
-                  onClick={() => {
-                    navigate(`/profile/${value.UserId}`);
-                  }}
-                >
-                  <AccountCircleIcon sx={{ color: grey[600], fontSize: 40 }} />
-                  {/* <AccountCircleIcon sx={{ color: "white", fontSize: 40 }} /> */}
 
-                  <div className="username">
-                    {/* <Link to={`/profile/${value.UserId}`}>{value.username}</Link> */}
-                    {value.username}
-                  </div>
-                </div>
-                {/* <div className="post-body"> */}
-                <div className="post-text-container center-vertical">
-                  {/* <div className="post-text"> */}
-                  {/* <div className="title">{value.title}: </div> */}
-                  <div
-                    className="body"
-                    onClick={() => {
-                      console.log("navigating to post");
-                      navigate(`/post/${value.id}`);
-                    }}
-                  ></div>
-                  {value.postText}
-                </div>
-                {/* </div> */}
-              </div>
-              <div className="footer">
-                <CommentOutlinedIcon
-                  sx={{ color: grey[600] }}
-                  // sx={{ color: "white" }}
-                  onClick={() => {
-                    navigate(`/post/${value.id}`);
-                  }}
-                />
-                <div className="likes">
-                  <ThumbUpOutlinedIcon
-                    sx={{ color: grey[600] }}
-                    // sx={{ color: "white" }}
-                    onClick={() => likePost(value.id)}
-                    className={
-                      likedPosts.includes(value.id) ? "unlikeBttn" : "likeBttn" //TO DO: create unlikeBttn and likeBttn class
-                    }
-                  />
-                  <label> {value.Likes.length} </label>
-                </div>
-                <RepeatOutlinedIcon sx={{ color: grey[600] }} />
-                {/* <RepeatOutlinedIcon sx={{ color: "white" }} /> */}
-                <FileUploadOutlinedIcon sx={{ color: grey[600] }} />
-                {/* <FileUploadOutlinedIcon sx={{ color: "white" }} /> */}
-                {/* <FileUploadOutlinedIcon sx={{ color: "white" }} /> */}
-                {/* <div className="username">
-                <Link to={`/profile/${value.UserId}`}>{value.username}</Link>
-              </div> */}
-                {/* <div className="comment-button">Comments</div> */}
-                {/* <label> {value.Likes.length} </label> */}
-              </div>
-              {/* </div> */}
+        {listOfPosts.map((post) => (
+          <div key={post.id} className="post">
+            <div
+              className="post-header"
+              onClick={() => navigate(`/profile/${post.UserId}`)}
+            >
+              <AccountCircleIcon className="icon-small" />
+              <span className="post-username">{post.username}</span>
             </div>
-          );
-        })}
-      </div>
+            <div
+              className="post-body"
+              onClick={() => navigate(`/post/${post.id}`)}
+            >
+              {post.postText}
+            </div>
+            <div className="post-footer">
+              <CommentOutlinedIcon
+                onClick={() => navigate(`/post/${post.id}`)}
+              />
+              <div className="like-section">
+                <ThumbUpOutlinedIcon
+                  onClick={() => likePost(post.id)}
+                  className={likedPosts.includes(post.id) ? "liked" : ""}
+                />
+                <span>{post.Likes.length}</span>
+              </div>
+              <RepeatOutlinedIcon />
+              <FileUploadOutlinedIcon />
+            </div>
+          </div>
+        ))}
+      </main>
     </div>
   );
 }

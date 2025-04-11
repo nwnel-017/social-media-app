@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 function Settings() {
@@ -9,46 +9,60 @@ function Settings() {
     profilePicture: "",
   });
 
-  const handleSubmit = (async) => {
-    console.log("do something");
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setUser({ ...user, [name]: value });
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Saving settings:", user);
+    // Add axios PUT/POST request here to update user settings
+  };
+
   return (
-    <div className="account-settings">
-      <h1>Account Settings</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div className="settings-container">
+      <div className="settings-card">
+        <h2>Account Settings</h2>
+        <form className="settings-form" onSubmit={handleSubmit}>
           <label>Username</label>
           <input
             type="text"
             name="username"
-            // value={user.username}
-            // onChange={handleChange}
+            value={user.username}
+            onChange={handleChange}
+            placeholder="Enter username"
           />
-        </div>
-        <div>
+
           <label>Email</label>
           <input
             type="email"
             name="email"
-            // value={user.email}
-            // onChange={handleChange}
+            value={user.email}
+            onChange={handleChange}
+            placeholder="Enter email"
           />
-        </div>
-        <div>
+
           <label>Bio</label>
-          {/* <textarea name="bio" value={user.bio} onChange={handleChange} /> */}
-        </div>
-        <div>
+          <textarea
+            name="bio"
+            value={user.bio}
+            onChange={handleChange}
+            placeholder="Tell us about yourself"
+          />
+
           <label>Profile Picture</label>
           <input
             type="text"
             name="profilePicture"
-            // value={user.profilePicture}
-            // onChange={handleChange}
+            value={user.profilePicture}
+            onChange={handleChange}
+            placeholder="Image URL"
           />
-        </div>
-        <button type="submit">Save Changes</button>
-      </form>
+
+          <button type="submit">Save Changes</button>
+        </form>
+      </div>
     </div>
   );
 }

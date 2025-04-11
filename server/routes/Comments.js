@@ -16,7 +16,7 @@ router.post("/", validateToken, async (req, res) => {
   console.log("username from routes/comments: " + username); //this is undefined -> username is not getting stored properly -> in routes/Users
   comment.username = username; //issue -> username is null
   await Comments.create(comment);
-  res.json(comment);
+  res.json({ username: req.user.username, id: comment.id });
 });
 
 router.delete("/:commentId", validateToken, async (req, res) => {

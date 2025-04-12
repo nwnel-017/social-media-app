@@ -123,19 +123,21 @@ function Feed({ listOfPosts, likedPosts }) {
             >
               {post.postText}
             </div>
-            <div className="post-footer">
-              <CommentOutlinedIcon
-                onClick={() => navigate(`/post/${post.id}`)}
-              />
-              <div className="like-section">
-                <ThumbUpOutlinedIcon
-                  onClick={() => likePost(post.id)}
-                  className={likedPosts.includes(post.id) ? "liked" : ""}
+            <div className="flex-middle">
+              <div className="post-footer">
+                <CommentOutlinedIcon
+                  onClick={() => navigate(`/post/${post.id}`)}
                 />
-                <span>{post.Likes.length}</span>
+                <div className="like-section">
+                  <ThumbUpOutlinedIcon
+                    onClick={() => likePost(post.id)}
+                    className={likedPosts.includes(post.id) ? "liked" : ""}
+                  />
+                  <span>{post.Likes.length}</span>
+                </div>
+                <RepeatOutlinedIcon />
+                <FileUploadOutlinedIcon />
               </div>
-              <RepeatOutlinedIcon />
-              <FileUploadOutlinedIcon />
             </div>
           </div>
         ))}

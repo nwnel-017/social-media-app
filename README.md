@@ -1,4 +1,4 @@
-﻿# social-media-app
+# My Web App
 
 Welcome to my web app! This is a simple javascript web application to display a social media feed. It has functionality to sign in / sign up for an account, update the password, create and like posts, comment on a post, and follow or unfollow users. 
 

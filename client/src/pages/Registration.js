@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../App.css"; // assuming you add this stylesheet
+import "../App.css";
 
 function Registration() {
   const initialValues = {

@@ -1,6 +1,6 @@
 # My Web App
 
-Welcome to my web app! This is a simple javascript web application to display a social media feed. It has functionality to sign in / sign up for an account, update the password, create and like posts, comment on a post, and follow or unfollow users. 
+Welcome to my web app! This is a simple Javascript web application to display a social media feed. It has functionality to sign in / sign up for an account, update the password, create and like posts, comment on a post, and follow or unfollow users. 
 
 # How I built my app
 I built my app using primarily javascript, CSS, and HTML. I used the React and Axios libraries for my front end and Node js as the framework for my backend. I also used the Sequelize library for object relational mapping.
